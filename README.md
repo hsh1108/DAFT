@@ -22,12 +22,10 @@ def convert_bn_params(model, data_loader):
 
             def new_forward(bn, stats_est):
                 def lambda_forward(x):
-                    x = x.contiguous()     
-                    # compute mean of batch samples 
+                    x = x.contiguous()                         
                     batch_mean = torch.mean(x, dim=[0, 2, 3])
-                    batch_var = torch.var(x, dim=[0, 2, 3])    # it computes sample variance (not population variance)
+                    batch_var = torch.var(x, dim=[0, 2, 3])  
                     stats_est.update(batch_mean.data, batch_var.data)                    
-
                     # bn forward using calculated mean & var                    
                     return F.batch_norm(
                         x,
