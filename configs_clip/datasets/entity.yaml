@@ -1,0 +1,48 @@
+save_path: 'disk/results'
+batch_size: 64
+num_workers: 12
+num_classes: 30
+name:
+
+train_dataset:
+  name: 'entity'
+  classname: datasets.breeds.Breeds
+  args:
+    source: True
+    split: 'train'
+    breeds_name: 'entity30'
+    root: 'disk/data/imagenet'
+
+train_transforms:
+  - classname: torchvision.transforms.RandomResizedCrop
+    args:
+      size: 224
+  - classname: torchvision.transforms.RandomHorizontalFlip
+  - classname: torchvision.transforms.ToTensor
+
+
+test_datasets:
+  - name: 'id_val'
+    classname: datasets.breeds.Breeds
+    args:
+      source: True
+      split: 'val'
+      breeds_name: 'entity30'
+      root: 'disk/data/imagenet'
+  - name: 'target_val_entity'
+    classname: datasets.breeds.Breeds
+    args:
+      source: False
+      target: True
+      split: 'val'
+      breeds_name: 'entity30'
+      root: 'disk/data/imagenet'
+
+test_transforms:
+  - classname: torchvision.transforms.Resize
+    args:
+      size: 256
+  - classname: torchvision.transforms.CenterCrop
+    args:
+      size: 224
+  - classname: torchvision.transforms.ToTensor

@@ -1,0 +1,44 @@
+save_path: 'disk/results'
+batch_size: 64
+num_workers: 12
+num_classes: 10
+name:
+
+train_dataset:
+  name: cifar
+  classname: torchvision.datasets.CIFAR10
+  args:
+    root: 'disk/data/cifar'
+    train: True        
+    download: False
+    
+ 
+train_transforms:
+  - classname: torchvision.transforms.Resize
+    args:
+      size: 224
+  - classname: torchvision.transforms.RandomHorizontalFlip
+  - classname: torchvision.transforms.ToTensor
+
+test_datasets:
+  - name: 'id_val'
+    classname: torchvision.datasets.CIFAR10
+    args:
+      root: 'disk/data/cifar'
+      train: False          
+      download: False
+  - name: 'cifar10.1'
+    classname: datasets.cifar10p1.CIFAR10p1
+    args:
+      root: 'disk/data/cifar/CIFAR-10-P1'
+  - name: 'stl10'
+    classname: datasets.stl_cifar_style.STL10
+    args:
+      root: 'disk/data/cifar'
+      split: 'test'
+
+test_transforms:
+  - classname: torchvision.transforms.Resize
+    args:
+      size: 224
+  - classname: torchvision.transforms.ToTensor

@@ -1,0 +1,76 @@
+save_path: 'disk/results'
+batch_size: 64
+num_workers: 12
+num_classes: 40
+name:
+
+train_dataset:
+  name: 'domainnet_sketch'
+  classname: datasets.domainnet.DomainNet
+  args:
+    domain: 'sketch'
+    split: 'train'
+    root: 'disk/data/domainnet'
+    version: 'sentry'
+    verbose: False
+
+train_transforms:
+  - classname: datasets.transforms.Resize
+    args:
+      size: [256, 256]
+      interpolation: 'bicubic'
+  - classname: torchvision.transforms.RandomCrop
+    args:
+      size: 224
+  - classname: torchvision.transforms.RandomHorizontalFlip
+  - classname: torchvision.transforms.ToTensor
+
+test_datasets:
+  - name: 'id_val'
+    classname: datasets.domainnet.DomainNet
+    args:
+      domain: 'sketch'
+      split: 'test'
+      root: 'disk/data/domainnet'
+      version: 'sentry'
+      verbose: False
+  - name: 'real_val'
+    classname: datasets.domainnet.DomainNet
+    args:
+      domain: 'real'
+      split: 'test'
+      root: 'disk/data/domainnet'
+      version: 'sentry'
+      verbose: False
+  - name: 'painting_val'
+    classname: datasets.domainnet.DomainNet
+    args:
+      domain: 'painting'
+      split: 'test'
+      root: 'disk/data/domainnet'
+      version: 'sentry'
+      verbose: False
+  - name: 'clipart_val'
+    classname: datasets.domainnet.DomainNet
+    args:
+      domain: 'clipart'
+      split: 'test'
+      root: 'disk/data/domainnet'
+      version: 'sentry'
+      verbose: False
+  - name: 'ood_val'
+    classname: datasets.domainnet.DomainNet
+    args:
+      domain: 'real,painting,clipart'
+      split: 'test'
+      root: 'disk/data/domainnet'
+      version: 'sentry'
+      verbose: False
+
+
+test_transforms:
+  - classname: datasets.transforms.Resize
+    args:
+      size: [224, 224]
+      interpolation: 'bicubic'
+  - classname: torchvision.transforms.ToTensor

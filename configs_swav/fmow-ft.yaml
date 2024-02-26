@@ -1,0 +1,48 @@
+inherit:
+  - datasets/fmow.yaml
+
+save_path: 'disk/results'
+log_interval: 100
+seed:
+
+transfer:
+  name: 'ft'  
+  epochs: &epochs 50
+  pretrained_head: False
+  use_val_mode: False
+  convert_bn_params: False
+  linear_head_lr:
+  
+criterion:
+  classname: torch.nn.CrossEntropyLoss
+  args:
+    reduction: mean
+
+optimizer:
+  classname: torch.optim.SGD
+  args:
+    lr:
+      ~disjoint:
+        - 0.3
+        - 0.1
+        - 0.03
+        - 0.01
+        - 0.003
+        - 0.001
+        - 0.0003
+        - 0.0001           
+    momentum: 0.9    
+
+scheduler:
+  classname: torch.optim.lr_scheduler.CosineAnnealingLR
+  args:
+    T_max: *epochs
+
+model:
+  name: resnet50-swav
+  classname: models.imnet_resnet.ResNet50  
+  args:
+    pretrained: True
+    pretrain_style: 'swav'
+    checkpoint_path: 'disk/pretrained_checkpoints/swav_800ep_pretrain.pth.tar'   
+    normalize: True

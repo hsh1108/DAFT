@@ -1,0 +1,49 @@
+inherit:
+  - datasets/living.yaml
+
+save_path: 'disk/results'
+log_interval: 100
+seed:
+
+transfer:
+  name: 'lp_ft'  
+  epochs: &epochs 20
+  pretrained_head: lp
+  use_val_mode: True
+  convert_bn_params: False
+  linear_head_lr:
+
+
+criterion:
+  classname: torch.nn.CrossEntropyLoss
+  args:
+    reduction: mean
+
+optimizer:
+  classname: torch.optim.SGD
+  args:
+    lr:
+      ~disjoint:
+        - 0.01
+        - 0.003
+        - 0.001
+        - 0.0003
+        - 0.0001
+        - 0.00003
+        - 0.00001
+        - 0.000003
+    momentum: 0.9    
+
+scheduler:
+  classname: torch.optim.lr_scheduler.CosineAnnealingLR
+  args:
+    T_max: *epochs
+
+model:
+  name: resnet50-swav
+  classname: models.imnet_resnet.ResNet50  
+  args:
+    pretrained: True
+    pretrain_style: 'swav'
+    checkpoint_path: 'disk/pretrained_checkpoints/swav_800ep_pretrain.pth.tar'   
+    normalize: True

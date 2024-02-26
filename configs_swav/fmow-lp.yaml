@@ -1,0 +1,23 @@
+inherit:
+  - configs/datasets/fmow.yaml
+
+save_path: 'disk/results'
+seed:
+
+transfer:
+  name: 'lp'
+  normalize_features: true
+  max_iter: 200
+  reg_sweep_num: 50
+  reg_start: -7
+  reg_end: 2
+  pad_class: True
+
+model:
+  name: resnet50-swav
+  classname: models.imnet_resnet.ResNet50  
+  args:
+    pretrained: True
+    pretrain_style: 'swav'
+    checkpoint_path: 'disk/pretrained_checkpoints/swav_800ep_pretrain.pth.tar'   
+    normalize: True

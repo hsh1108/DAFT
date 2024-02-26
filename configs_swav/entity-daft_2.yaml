@@ -1,0 +1,45 @@
+inherit:
+  - datasets/entity.yaml
+
+save_path: 'disk/results'
+log_interval: 100
+seed:
+
+transfer:
+  name: 'daft'
+  epochs: &epochs 20
+  pretrained_head: False
+  use_val_mode: False
+  convert_bn_params: True
+  linear_head_lr:
+    ~disjoint:
+      - 10.0
+      - 3.0
+      - 0.3
+      - 0.1
+
+
+criterion:
+  classname: torch.nn.CrossEntropyLoss
+  args:
+    reduction: mean
+
+optimizer:
+  classname: torch.optim.SGD
+  args:
+    lr: 
+    momentum: 0.9    
+
+scheduler:
+  classname: torch.optim.lr_scheduler.CosineAnnealingLR
+  args:
+    T_max: *epochs
+
+model:
+  name: resnet50-swav
+  classname: models.imnet_resnet.ResNet50  
+  args:
+    pretrained: True
+    pretrain_style: 'swav'
+    checkpoint_path: 'disk/pretrained_checkpoints/swav_800ep_pretrain.pth.tar'   
+    normalize: True

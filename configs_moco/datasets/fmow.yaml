@@ -1,0 +1,46 @@
+save_path: 'disk/results'
+batch_size: 64
+num_workers: 12
+num_classes: 62
+name:
+
+train_dataset:
+  name: 'fmow_americas'
+  classname: datasets.fmow.Fmow
+  args:
+      split: 'train'
+      regions: [3] 
+      root: 'disk/data'
+
+train_transforms:
+  - classname: torchvision.transforms.RandomHorizontalFlip
+  - classname: torchvision.transforms.ToTensor
+
+
+test_datasets:
+  - name: 'id_val'
+    classname: datasets.fmow.Fmow
+    args:
+      split: 'id_val'
+      regions: [3]
+      root: 'disk/data' 
+  - name: 'ood:val'
+    classname: datasets.fmow.Fmow
+    args:
+      split: 'val'
+      regions: [1,2]
+      root: 'disk/data'
+  - name: 'ood:id_val'
+    classname: datasets.fmow.Fmow
+    args:
+      split: 'id_val'
+      regions: [1,2]
+      root: 'disk/data'
+
+
+test_transforms:
+  - classname: datasets.transforms.Resize
+    args:
+      size: [224, 224]
+      interpolation: 'bicubic'
+  - classname: torchvision.transforms.ToTensor
